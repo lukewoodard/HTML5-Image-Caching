@@ -1,5 +1,7 @@
 This library demonstrates how you can cache images using localStorage for use if there isn't an internet connection.  This was basically a POC. You can view a working demo at http://216.121.100.234/html5/demo.html
 
+Basically how this works is, you take a url of an image and draw it to a <canvas>. Once you draw the image to the <canvas>, you can call canvas.getDataURL() on it to get a base64 encoded string of the image (requires the image be on the same server). You can then take that string and store it into localStorage. Since localStorage doesn't allow anything but string data, we store string representations of JSON objects. One gotcha is that you can run out of space pretty quick, depending on your image size.  I implemented it where the first image will be removed to make room. It was a gross hack, there's got to be a better way.
+
 Required: jQuery (http://docs.jquery.com/Downloading_jQuery) and JSON stringifier (http://www.json.org/js.html)
 
 ** NOTE: images that you add must be on the same server as the script, for security reasons (see: http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#security-with-canvas-elements)
