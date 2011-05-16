@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Html5 Image Caching Demo</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://github.com/douglascrockford/JSON-js/raw/master/json2.js"></script>
+    <script type="text/javascript" src="ImageCache.js"></script>
+    <script type="text/javascript">
+        var preLoadList = [
+                            "http://localhost/html5/imagecaching/img1.jpg",
+                            "http://localhost/html5/imagecaching/img2.jpg",
+                            "http://localhost/html5/imagecaching/img3.jpg",
+                            "http://localhost/html5/imagecaching/img4.jpg"
+                          ];
+
+        $(document).ready(function () {
+            if (localStorage.getItem("initialLoad") == null) {
+                DoInitialLoad();
+                localStorage.setItem("initialLoad", true)
+            }
+            else
+                RenderStorageTable();
+
+            $("#addImage").click(function () {
+                ImageCache.addToCache($("#imageToAdd").val(), imageAddedComplete);
+            });
+        });
+
+        function imageAddedComplete(item) {
+            ImageCache.drawImageToCanvas(document.getElementById("displayCanvas"), item.dataURL);
+            RenderStorageTable();
+        }
+
+        function DoInitialLoad() {            
+            for (i = 0; i < preLoadList.length; i++)
+                ImageCache.addToCache(preLoadList[i]);
+            WaitForInitialLoad();
+        }
+
+        function WaitForInitialLoad()
+        {
+            var imageList = ImageCache.getImageListFromCache();
+            if(imageList == null || imageList.length != preLoadList.length)
+                setTimeout("WaitForInitialLoad()", 1000);
+            else
+                RenderStorageTable();
+        }
+        
+        function ShowImageFromStorage(idx) {
+            ImageCache.drawImageToCanvas(document.getElementById('displayCanvas'), ImageCache.getImageFromCache(idx).dataURL);
+        }
+
+        function RemoveImageFromStorage(idx) {
+            ImageCache.removeImageFromCache(idx);
+            RenderStorageTable();
+        }
+
+        function RenderStorageTable() {
+            var imageList = ImageCache.getImageListFromCache();
+            $("#storageTable").find("tr:gt(0)").remove();
+            if (imageList == null) return;
+            for (i = 0; i < imageList.length; i++) {
+                $("#storageTable tr:last").after("<tr><td>" + imageList[i].url + "</td><td><a href='javascript:ShowImageFromStorage(" + i + ")'>View</a></td><td><a href='javascript:RemoveImageFromStorage(" + i + ")'>Remove</a></td></tr>");
+            }
+        }
+    </script>
+    <style>
+        body
+        {
+        	margin:0;
+        	font-family: Verdana;
+        	font-size:12px;
+        }
+        
+        #container
+        {
+        	width:600px;
+        	margin-left:auto;
+        	margin-right:auto;
+        	padding-top:20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        Enter a url below to add the image to the local storage cache. <b>Images must be on the same server executing the script</b><br /><br />
+        Image URL: <input type="text" id="imageToAdd" style="width:200px" value="http://localhost/html5/imagecaching/img5.jpg" /> <input type="button" id="addImage" value="Add Image to Cache" />
+        <br /><br />
+        <table cellpadding=1 style="width:600px" id="storageTable">
+            <thead>
+                <tr>
+                    <td style="width:440px"></td>
+                    <td style="width:45px"></td>
+                    <td style="width:55px"></td>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+        <canvas id="displayCanvas">
+            Your browser does not support HTML 5
+        </canvas>
+    </div>
+</body>
+</html> 
