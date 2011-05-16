@@ -1,0 +1,23 @@
+This library demonstrates how you can cache images using localStorage for use if there isn't an internet connection.  This was basically a POC.
+
+Required: jQuery (http://docs.jquery.com/Downloading_jQuery) and JSON stringifier (http://www.json.org/js.html)
+
+** NOTE: images that you add must be on the same server as the script, for security reasons (see: http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#security-with-canvas-elements)
+
+There are some functions available for use:
+
+ * addToCache(url, callback)
+	- attempts to add the image at the url to the localStorage
+	- sends the JSON object back to the callback function (if specified)
+	- the JSON object is { 'dataURL': xx, 'url': yy }, where dataURL is the base64 encoded version of the image
+
+ * drawImageToCanvas(canvas, url, callback)
+	- draws the url onto the canvas as an Image object
+	- when the image is loaded and draw, callback is called, sending the 2 fields, the url and the dataURL
+
+The rest of these are self explanatory:
+
+ * getImageFromCache(index)
+ * getImageFromCacheByUrl(url)
+ * getImageListFromCache()
+ * removeImageFromCache(index)
