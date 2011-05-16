@@ -1,4 +1,4 @@
-This library demonstrates how you can cache images using localStorage for use if there isn't an internet connection.  This was basically a POC.
+This library demonstrates how you can cache images using localStorage for use if there isn't an internet connection.  This was basically a POC. You can view a working demo at http://216.121.100.234/html5/demo.html
 
 Required: jQuery (http://docs.jquery.com/Downloading_jQuery) and JSON stringifier (http://www.json.org/js.html)
 
